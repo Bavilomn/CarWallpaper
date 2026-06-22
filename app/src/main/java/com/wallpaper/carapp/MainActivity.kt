@@ -164,7 +164,10 @@ class MainActivity : ComponentActivity() {
 
                         DetailScreen(
 
-                            imageRes = imageRes
+                            imageRes = imageRes,
+                            onBackClick = {
+                                navController.popBackStack()
+                            }
 
                         )
 
