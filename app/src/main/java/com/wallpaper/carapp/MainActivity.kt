@@ -62,11 +62,11 @@ class MainActivity : ComponentActivity() {
 
                         SettingsScreen(
 
-                            // 기존 비밀기능 유지
-                            onSecretClick = {
+                            // 정보 페이지
+                            onInfoClick = {
 
                                 navController.navigate(
-                                    "secret"
+                                    "info"
                                 )
 
                             },
@@ -87,6 +87,25 @@ class MainActivity : ComponentActivity() {
 
                                 navController.navigate(
                                     "license"
+                                )
+
+                            }
+
+                        )
+
+                    }
+
+
+
+                    composable("info") {
+
+                        InfoScreen(
+
+                            // 기존 비밀기능 유지
+                            onSecretClick = {
+
+                                navController.navigate(
+                                    "secret"
                                 )
 
                             }

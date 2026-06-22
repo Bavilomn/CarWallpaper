@@ -1,7 +1,7 @@
 package com.wallpaper.carapp
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,24 +34,28 @@ fun HomeScreen(
     onSettingsClick: () -> Unit = {}
 ) {
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         text = "Car Wallpapers",
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 actions = {
-                    Text(
-                        text = "⋮",
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier
-                            .padding(end = 20.dp)
-                            .clickable {
-                                onSettingsClick()
-                            }
-                    )
+                    IconButton(
+                        onClick = {
+                            onSettingsClick()
+                        }
+                    ) {
+                        Text(
+                            text = "⋮",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
@@ -63,7 +68,9 @@ fun HomeScreen(
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(12.dp),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
@@ -71,17 +78,19 @@ fun HomeScreen(
             items(WallpaperRepository.wallpapers) { wallpaper ->
 
                 Card(
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
                     elevation = CardDefaults.cardElevation(
-                        defaultElevation = 3.dp
+                        defaultElevation = 2.dp
                     ),
                     modifier = Modifier
-                        .padding(6.dp)
                         .fillMaxWidth()
-                        .aspectRatio(0.75f)
-                        .clickable {
-                            onWallpaperClick(wallpaper.imageRes)
-                        }
+                        .aspectRatio(0.76f),
+                    onClick = {
+                        onWallpaperClick(wallpaper.imageRes)
+                    }
                 ) {
                     Image(
                         painter = painterResource(id = wallpaper.imageRes),
@@ -89,7 +98,7 @@ fun HomeScreen(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxSize()
-                            .clip(RoundedCornerShape(10.dp))
+                            .clip(RoundedCornerShape(14.dp))
                     )
                 }
             }

@@ -2,7 +2,6 @@ package com.wallpaper.carapp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -19,16 +18,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SettingsScreen(
-    onInfoClick: () -> Unit = {},
-    onDeveloperClick: () -> Unit = {},
-    onLicenseClick: () -> Unit = {}
+fun InfoScreen(
+    onSecretClick: () -> Unit = {}
 ) {
+    var clickCount by remember {
+        mutableStateOf(0)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -37,28 +42,23 @@ fun SettingsScreen(
             .padding(horizontal = 20.dp, vertical = 28.dp)
     ) {
         Text(
-            text = "설정",
+            text = "정보",
             style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.clickable {
+                clickCount++
+
+                if (clickCount >= 20) {
+                    clickCount = 0
+                    onSecretClick()
+                }
+            }
         )
 
         Spacer(modifier = Modifier.height(22.dp))
 
-        SettingsGroup {
-            SettingsRow(
-                title = "정보",
-                subtitle = "앱 세부 정보",
-                showChevron = true,
-                onClick = {
-                    onInfoClick()
-                }
-            )
-        }
-
-        Spacer(modifier = Modifier.height(18.dp))
-
-        SettingsGroup {
-            InfoRow(
+        InfoGroup {
+            InfoDetailRow(
                 title = "앱 이름",
                 value = "자동차 배경화면 앱"
             )
@@ -68,7 +68,7 @@ fun SettingsScreen(
                 color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)
             )
 
-            InfoRow(
+            InfoDetailRow(
                 title = "버전",
                 value = "1.0.0"
             )
@@ -76,10 +76,10 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        SettingsGroup {
-            SettingsRow(
-                title = "개발자 페이지",
-                onClick = onDeveloperClick
+        InfoGroup {
+            InfoDetailRow(
+                title = "카테고리",
+                value = "Car Wallpapers"
             )
 
             HorizontalDivider(
@@ -87,16 +87,7 @@ fun SettingsScreen(
                 color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)
             )
 
-            SettingsRow(
-                title = "오픈소스 라이선스",
-                onClick = onLicenseClick
-            )
-        }
-
-        Spacer(modifier = Modifier.height(18.dp))
-
-        SettingsGroup {
-            InfoRow(
+            InfoDetailRow(
                 title = "저작권",
                 value = "© 2026 CarApp"
             )
@@ -105,7 +96,7 @@ fun SettingsScreen(
 }
 
 @Composable
-private fun SettingsGroup(
+private fun InfoGroup(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Surface(
@@ -123,52 +114,7 @@ private fun SettingsGroup(
 }
 
 @Composable
-private fun SettingsRow(
-    title: String,
-    subtitle: String? = null,
-    showChevron: Boolean = true,
-    onClick: () -> Unit
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            }
-            .padding(horizontal = 16.dp, vertical = 14.dp)
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(3.dp),
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            if (subtitle != null) {
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-
-        if (showChevron) {
-            Text(
-                text = "›",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun InfoRow(
+private fun InfoDetailRow(
     title: String,
     value: String
 ) {
